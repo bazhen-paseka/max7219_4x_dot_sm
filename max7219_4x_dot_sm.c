@@ -5,54 +5,73 @@
 #define BYTE_IN_SPI_PACKAGE		2
 #define SPI_PACKAGE_TIMEOUT		2
 
+	uint8_t myTrans[8]; // 1 - for  razryad or Adres; 2- znachenie
+
 void _max7219_print_one_digit(max7219_struct max7219_handler, uint8_t position, uint32_t value);
 void _max7219_write_strob(max7219_struct max7219_handler);
 /***************************************************************************************/
 
-
-void max7219_init(max7219_struct *max7219_handler)
+void max7219_4x_dot_init(max7219_struct *max7219_handler)
 {
-	uint8_t spi_buffer[2];
+	 // test - On
+	    myTrans[0] = 0x0F;  myTrans[1] = 0x01;
+	    myTrans[2] = 0x0F;  myTrans[3] = 0x01;
+	    myTrans[4] = 0x0F;  myTrans[5] = 0x01;
+	    myTrans[6] = 0x0F;  myTrans[7] = 0x01;
 
-	HAL_GPIO_WritePin(max7219_handler->cs_port, max7219_handler->cs_pin, RESET);
-	//_max7219_write_strob(*max7219_handler);
+	    HAL_SPI_Transmit(max7219_handler->spi, myTrans, 8, 1);
+	    _max7219_write_strob(*max7219_handler);
 
-	// test - On
-//	spi_buffer[0] = 0x0F;  spi_buffer[1] = 0x01;
-//	HAL_SPI_Transmit(max7219_handler->spi, spi_buffer, BYTE_IN_SPI_PACKAGE, SPI_PACKAGE_TIMEOUT);
-//	_max7219_write_strob(*max7219_handler);
+	    HAL_Delay(500);
 
-	HAL_Delay(100);
+	    // test - Off
+	    myTrans[0] = 0x0F;  myTrans[1] = 0x00;
+	    myTrans[2] = 0x0F;  myTrans[3] = 0x00;
+	    myTrans[4] = 0x0F;  myTrans[5] = 0x00;
+	    myTrans[6] = 0x0F;  myTrans[7] = 0x00;
 
-	// test - Off
-	spi_buffer[0] = 0x0F;  spi_buffer[1] = 0x00;
-	HAL_SPI_Transmit(max7219_handler->spi, spi_buffer, BYTE_IN_SPI_PACKAGE, SPI_PACKAGE_TIMEOUT);
-	_max7219_write_strob(*max7219_handler);
+	    HAL_SPI_Transmit(max7219_handler->spi, myTrans,8,1);
+	    _max7219_write_strob(*max7219_handler);
 
-	// Decode Mode - No 1 in 1
-	// spi_buffer[1] hex   -> FF
-	// spi_buffer[1] pixel -> 00
-	uint8_t DecodeMode = 0xFF;
-	spi_buffer[0] = 0x09;  spi_buffer[1] = DecodeMode;	// pixel
-	HAL_SPI_Transmit(max7219_handler->spi, spi_buffer, BYTE_IN_SPI_PACKAGE, SPI_PACKAGE_TIMEOUT);
-	_max7219_write_strob(*max7219_handler);
+	    // Decode Mode - No 1 in 1
+	    // myTrans[1] hex   -> FF
+	    // myTrans[1] pixel -> 00
+	    myTrans[0] = 0x09;  myTrans[1] = 0x00;	// pixel
+	    myTrans[2] = 0x09;  myTrans[3] = 0x00;	// pixel
+	    myTrans[4] = 0x09;  myTrans[5] = 0x00;	// pixel
+	    myTrans[6] = 0x09;  myTrans[7] = 0x00;	// pixel
 
-	// Intensity 3/32 0x01,
-	spi_buffer[0] = 0x0A;  spi_buffer[1] = 0x03;
-	HAL_SPI_Transmit(max7219_handler->spi, spi_buffer, BYTE_IN_SPI_PACKAGE, SPI_PACKAGE_TIMEOUT);
-	_max7219_write_strob(*max7219_handler);
+	    HAL_SPI_Transmit(max7219_handler->spi, myTrans, 8, 1);;
+	    _max7219_write_strob(*max7219_handler);
 
-	//Scan Limit - All
-	spi_buffer[0] = 0x0B;  spi_buffer[1] = 0x07;
-	HAL_SPI_Transmit(max7219_handler->spi, spi_buffer, BYTE_IN_SPI_PACKAGE, SPI_PACKAGE_TIMEOUT);
-	_max7219_write_strob(*max7219_handler);
+	    // Intensity 3/32
+	    myTrans[0] = 0x0A;  myTrans[1] = 0x01;
+	    myTrans[2] = 0x0A;  myTrans[3] = 0x01;
+	    myTrans[4] = 0x0A;  myTrans[5] = 0x01;
+	    myTrans[6] = 0x0A;  myTrans[7] = 0x01;
 
-	// Shutdown - none
-	// spi_buffer[1] -> 00 sleep
-	// spi_buffer[1] -> 01 work
-	spi_buffer[0] = 0x0C;  spi_buffer[1] = 0x01;
-	HAL_SPI_Transmit(max7219_handler->spi, spi_buffer, BYTE_IN_SPI_PACKAGE, SPI_PACKAGE_TIMEOUT);
-	_max7219_write_strob(*max7219_handler);
+	    HAL_SPI_Transmit(max7219_handler->spi, myTrans, 8, 1);
+	    _max7219_write_strob(*max7219_handler);
+
+	    //Scan Limit - All
+	    myTrans[0] = 0x0B;  myTrans[1] = 0x07;
+	    myTrans[2] = 0x0B;  myTrans[3] = 0x07;
+	    myTrans[4] = 0x0B;  myTrans[5] = 0x07;
+	    myTrans[6] = 0x0B;  myTrans[7] = 0x07;
+
+	    HAL_SPI_Transmit(max7219_handler->spi, myTrans, 8, 1);
+	    _max7219_write_strob(*max7219_handler);
+
+	    // Shutdown - none
+	    // myTrans[1] -> 00 sleep
+	    // myTrans[1] -> 01 work
+	    myTrans[0] = 0x0C;  myTrans[1] = 0x01;
+	    myTrans[2] = 0x0C;  myTrans[3] = 0x01;
+	    myTrans[4] = 0x0C;  myTrans[5] = 0x01;
+	    myTrans[6] = 0x0C;  myTrans[7] = 0x01;
+
+	    HAL_SPI_Transmit(max7219_handler->spi, myTrans, 8, 1);
+	    _max7219_write_strob(*max7219_handler);
 }
 /***************************************************************************************/
 

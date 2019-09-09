@@ -46,7 +46,7 @@ typedef enum
 } position_enum;
 
 
-void max7219_init(max7219_struct *max7219_handler);
+void max7219_4x_dot_init(max7219_struct *max7219_handler);
 void max7219_print_value(max7219_struct *max7219_handler, uint32_t value, position_enum position);
 
 #endif 	//	MAX7219_4X_DOT_SM_H_INCLUDED
