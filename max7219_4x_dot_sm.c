@@ -5,7 +5,6 @@
 #define BYTE_IN_SPI_PACKAGE		8
 #define SPI_PACKAGE_TIMEOUT		1
 
-
 typedef enum
 {
 	ADDR_NO_OP 			= 0x00 ,
@@ -29,6 +28,7 @@ typedef enum
 void _max7219_print_one_digit(max7219_struct max7219_handler, uint8_t position, uint32_t value);
 void _max7219_write_strob(max7219_struct max7219_handler);
 void _max7219_push_data(max7219_struct max7219_handler);
+uint8_t inverse_order_in_byte (uint8_t input);
 
 /***************************************************************************************/
 
@@ -40,7 +40,7 @@ void max7219_init(max7219_struct *max7219_handler, max7219_Decode_Mode _decodemo
 	max7219_handler->data[4] = ADDR_DISPLAY_TEST;  max7219_handler->data[5] = TestMode;
 	max7219_handler->data[6] = ADDR_DISPLAY_TEST;  max7219_handler->data[7] = TestMode;
 	_max7219_push_data(*max7219_handler);
-	HAL_Delay(500);
+	HAL_Delay(200);
 
 	// test - Off
 	max7219_handler->data[0] = ADDR_DISPLAY_TEST;  max7219_handler->data[1] = WorkMode;
@@ -114,10 +114,23 @@ void max7219_show_all(max7219_struct *max7219_handler, 	max7219_map max7219_map_
 	for (uint8_t i=0; i<8; i++)
 	{
 		uint8_t addr_u8 = i + ADDR_DIGIT_0;
-		max7219_handler->data[6] = addr_u8;  max7219_handler->data[7] = max7219_map_handler.kub_0[i];
-		max7219_handler->data[4] = addr_u8;  max7219_handler->data[5] = max7219_map_handler.kub_1[i];
-		max7219_handler->data[2] = addr_u8;  max7219_handler->data[3] = max7219_map_handler.kub_2[i];
-		max7219_handler->data[0] = addr_u8;  max7219_handler->data[1] = max7219_map_handler.kub_3[i];
+		max7219_handler->data[6] = addr_u8;  max7219_handler->data[7] = inverse_order_in_byte(max7219_map_handler.kub_0[i]) ;
+		max7219_handler->data[4] = addr_u8;  max7219_handler->data[5] = inverse_order_in_byte(max7219_map_handler.kub_1[i]) ;
+		max7219_handler->data[2] = addr_u8;  max7219_handler->data[3] = inverse_order_in_byte(max7219_map_handler.kub_2[i]) ;
+		max7219_handler->data[0] = addr_u8;  max7219_handler->data[1] = inverse_order_in_byte(max7219_map_handler.kub_3[i]) ;
 		_max7219_push_data(*max7219_handler);
 	}
+}
+
+uint8_t inverse_order_in_byte (uint8_t input)
+{
+    uint8_t v2 =	((input & 0x01) << 7) |
+					((input & 0x02) << 5) |
+					((input & 0x04) << 3) |
+					((input & 0x08) << 1) |
+					((input & 0x10) >> 1) |
+					((input & 0x20) >> 3) |
+					((input & 0x40) >> 5) |
+					((input & 0x80) >> 7);
+    return v2;
 }
