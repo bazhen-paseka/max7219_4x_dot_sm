@@ -1,22 +1,22 @@
 #ifndef MAX7219_4X_DOT_SM_H_INCLUDED
 #define MAX7219_4X_DOT_SM_H_INCLUDED
 
+#define DIGIT_QNT_MAX 		10
+#define LINE_IN_DIGIT		8
+
+
 typedef struct
 {
 	SPI_HandleTypeDef	*spi;
 	GPIO_TypeDef 		*cs_port;
     uint16_t 			 cs_pin;
-    uint8_t				data[8];
+    uint8_t				data [LINE_IN_DIGIT];
+	uint8_t				kub_0[LINE_IN_DIGIT];
+	uint8_t				kub_1[LINE_IN_DIGIT];
+	uint8_t				kub_2[LINE_IN_DIGIT];
+	uint8_t				kub_3[LINE_IN_DIGIT];
 } max7219_struct;
 /***********************************/
-
-typedef struct
-{
-	uint8_t				kub_0[9];
-	uint8_t				kub_1[9];
-	uint8_t				kub_2[9];
-	uint8_t				kub_3[9];
-}	max7219_map;
 
 typedef enum
 {
@@ -29,6 +29,7 @@ typedef enum
 	DisplayDigit_0_6	=	0x06,
 	DisplayDigit_0_7	=	0x07
 }	 max7219_Scan_Limit;
+
 /***********************************/
 
 typedef enum
@@ -50,6 +51,7 @@ typedef enum
 	Intensity_29	= 0x0E,
 	Intensity_31	= 0x0F
 }	 max7219_LED_Intensity;
+
 /***********************************/
 
 typedef enum
@@ -64,6 +66,7 @@ typedef enum
 	WorkMode	= 0,
 	TestMode	= 1
 }	max7219_Display_Test ;
+
 /***********************************/
 
 typedef enum
@@ -78,10 +81,12 @@ typedef enum
 	DecodeForDigit_6_0	= 0x7F,
 	DecodeForDigit_7_0	= 0xFF,
 }	 max7219_Decode_Mode;
+
 /***********************************/
 
 void max7219_init(max7219_struct *max7219_handler, max7219_Decode_Mode _decodemode,  max7219_LED_Intensity _intensity, max7219_Scan_Limit _scanlimit, max7219_Shutdown _shutdown);
-void max7219_show_all(max7219_struct *max7219_handler, 	max7219_map max7219_map_handler);
+void max7219_show_time(max7219_struct *max7219_handler, uint8_t _hour, uint8_t _minutes);
+
 /***********************************/
 
 #endif 	//	MAX7219_4X_DOT_SM_H_INCLUDED

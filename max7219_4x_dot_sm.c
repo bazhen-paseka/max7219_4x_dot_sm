@@ -26,6 +26,7 @@ typedef enum
 /***************************************************************************************/
 
 void _max7219_print_one_digit(max7219_struct max7219_handler, uint8_t position, uint32_t value);
+void _max7219_show_all(max7219_struct max7219_handler);
 void _max7219_write_strob(max7219_struct max7219_handler);
 void _max7219_push_data(max7219_struct max7219_handler);
 uint8_t inverse_order_in_byte (uint8_t input);
@@ -107,18 +108,18 @@ void _max7219_write_strob(max7219_struct max7219_handler)
 }
 /***************************************************************************************/
 
-void max7219_show_all(max7219_struct *max7219_handler, 	max7219_map max7219_map_handler)
+void _max7219_show_all(max7219_struct max7219_handler)
 {
 //	uint8_t myTrans[8]; // 1 - for  razryad or Adres; 2- znachenie
 
 	for (uint8_t i=0; i<8; i++)
 	{
 		uint8_t addr_u8 = i + ADDR_DIGIT_0;
-		max7219_handler->data[6] = addr_u8;  max7219_handler->data[7] = inverse_order_in_byte(max7219_map_handler.kub_0[i]) ;
-		max7219_handler->data[4] = addr_u8;  max7219_handler->data[5] = inverse_order_in_byte(max7219_map_handler.kub_1[i]) ;
-		max7219_handler->data[2] = addr_u8;  max7219_handler->data[3] = inverse_order_in_byte(max7219_map_handler.kub_2[i]) ;
-		max7219_handler->data[0] = addr_u8;  max7219_handler->data[1] = inverse_order_in_byte(max7219_map_handler.kub_3[i]) ;
-		_max7219_push_data(*max7219_handler);
+		max7219_handler.data[6] = addr_u8;  max7219_handler.data[7] = inverse_order_in_byte(max7219_handler.kub_0[i]) ;
+		max7219_handler.data[4] = addr_u8;  max7219_handler.data[5] = inverse_order_in_byte(max7219_handler.kub_1[i]) ;
+		max7219_handler.data[2] = addr_u8;  max7219_handler.data[3] = inverse_order_in_byte(max7219_handler.kub_2[i]) ;
+		max7219_handler.data[0] = addr_u8;  max7219_handler.data[1] = inverse_order_in_byte(max7219_handler.kub_3[i]) ;
+		_max7219_push_data(max7219_handler);
 	}
 }
 
@@ -133,4 +134,109 @@ uint8_t inverse_order_in_byte (uint8_t input)
 					((input & 0x40) >> 5) |
 					((input & 0x80) >> 7);
     return v2;
+}
+
+void max7219_show_time(max7219_struct *max7219_handler, uint8_t _hour, uint8_t _minut)
+{
+	uint8_t digit[DIGIT_QNT_MAX][LINE_IN_DIGIT];
+
+	digit[0][7] = 0b00011111 ;
+	digit[0][6] = 0b00010001 ;
+	digit[0][5] = 0b00010001 ;
+	digit[0][4] = 0b00010001 ;
+	digit[0][3] = 0b00010001 ;
+	digit[0][2] = 0b00010001 ;
+	digit[0][1] = 0b00010001 ;
+	digit[0][0] = 0b00011111 ;
+
+	digit[1][7] = 0b00000100 ;
+	digit[1][6] = 0b00001100 ;
+	digit[1][5] = 0b00010100 ;
+	digit[1][4] = 0b00000100 ;
+	digit[1][3] = 0b00000100 ;
+	digit[1][2] = 0b00000100 ;
+	digit[1][1] = 0b00000100 ;
+	digit[1][0] = 0b00011111 ;
+
+	digit[2][7] = 0b00011111 ;
+	digit[2][6] = 0b00000001 ;
+	digit[2][5] = 0b00000001 ;
+	digit[2][4] = 0b00011111 ;
+	digit[2][3] = 0b00010000 ;
+	digit[2][2] = 0b00010000 ;
+	digit[2][1] = 0b00010000 ;
+	digit[2][0] = 0b00011111 ;
+
+	digit[3][7] = 0b00011111 ;
+	digit[3][6] = 0b00000001 ;
+	digit[3][5] = 0b00000001 ;
+	digit[3][4] = 0b00011111 ;
+	digit[3][3] = 0b00000001 ;
+	digit[3][2] = 0b00000001 ;
+	digit[3][1] = 0b00000001 ;
+	digit[3][0] = 0b00011111 ;
+
+	digit[4][7] = 0b00010001 ;
+	digit[4][6] = 0b00010001 ;
+	digit[4][5] = 0b00010001 ;
+	digit[4][4] = 0b00011111 ;
+	digit[4][3] = 0b00000001 ;
+	digit[4][2] = 0b00000001 ;
+	digit[4][1] = 0b00000001 ;
+	digit[4][0] = 0b00000001 ;
+
+	digit[5][7] = 0b00011111 ;
+	digit[5][6] = 0b00010000 ;
+	digit[5][5] = 0b00010000 ;
+	digit[5][4] = 0b00011111 ;
+	digit[5][3] = 0b00000001 ;
+	digit[5][2] = 0b00000001 ;
+	digit[5][1] = 0b00000001 ;
+	digit[5][0] = 0b00011111 ;
+
+	digit[6][7] = 0b00011111 ;
+	digit[6][6] = 0b00010000 ;
+	digit[6][5] = 0b00010000 ;
+	digit[6][4] = 0b00011111 ;
+	digit[6][3] = 0b00010001 ;
+	digit[6][2] = 0b00010001 ;
+	digit[6][1] = 0b00010001 ;
+	digit[6][0] = 0b00011111 ;
+
+	digit[7][7] = 0b00011111 ;
+	digit[7][6] = 0b00000001 ;
+	digit[7][5] = 0b00000001 ;
+	digit[7][4] = 0b00000001 ;
+	digit[7][3] = 0b00000001 ;
+	digit[7][2] = 0b00000001 ;
+	digit[7][1] = 0b00000001 ;
+	digit[7][0] = 0b00000001 ;
+
+	digit[8][7] = 0b00011111 ;
+	digit[8][6] = 0b00010001 ;
+	digit[8][5] = 0b00010001 ;
+	digit[8][4] = 0b00011111 ;
+	digit[8][3] = 0b00010001 ;
+	digit[8][2] = 0b00010001 ;
+	digit[8][1] = 0b00010001 ;
+	digit[8][0] = 0b00011111 ;
+
+	digit[9][7] = 0b00011111 ;
+	digit[9][6] = 0b00010001 ;
+	digit[9][5] = 0b00010001 ;
+	digit[9][4] = 0b00011111 ;
+	digit[9][3] = 0b00000001 ;
+	digit[9][2] = 0b00000001 ;
+	digit[9][1] = 0b00000001 ;
+	digit[9][0] = 0b00011111 ;
+
+	for (uint8_t i=0; i<8; i++)
+	{
+		max7219_handler->kub_0[i] = digit[_hour/10][i]  <<1 ;
+		max7219_handler->kub_1[i] = digit[_hour%10][i]  <<2 ;
+		max7219_handler->kub_2[i] = digit[_minut/10][i] <<1 ;
+		max7219_handler->kub_3[i] = digit[_minut%10][i] <<2 ;
+	}
+
+	_max7219_show_all(*max7219_handler);
 }
