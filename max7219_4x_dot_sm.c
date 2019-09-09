@@ -9,7 +9,15 @@
 
 void _max7219_print_one_digit(max7219_struct max7219_handler, uint8_t position, uint32_t value);
 void _max7219_write_strob(max7219_struct max7219_handler);
+void _max7219_push_data(max7219_struct max7219_handler, uint8_t * _data);
+
 /***************************************************************************************/
+
+void _max7219_push_data(max7219_struct max7219_handler, uint8_t * _data)
+{
+    HAL_SPI_Transmit(max7219_handler.spi, _data, 8, 1);
+    _max7219_write_strob(max7219_handler);
+}
 
 void max7219_4x_dot_init(max7219_struct *max7219_handler)
 {
@@ -19,8 +27,7 @@ void max7219_4x_dot_init(max7219_struct *max7219_handler)
 	    myTrans[4] = 0x0F;  myTrans[5] = 0x01;
 	    myTrans[6] = 0x0F;  myTrans[7] = 0x01;
 
-	    HAL_SPI_Transmit(max7219_handler->spi, myTrans, 8, 1);
-	    _max7219_write_strob(*max7219_handler);
+	    _max7219_push_data(*max7219_handler, myTrans);
 
 	    HAL_Delay(500);
 
@@ -30,8 +37,7 @@ void max7219_4x_dot_init(max7219_struct *max7219_handler)
 	    myTrans[4] = 0x0F;  myTrans[5] = 0x00;
 	    myTrans[6] = 0x0F;  myTrans[7] = 0x00;
 
-	    HAL_SPI_Transmit(max7219_handler->spi, myTrans,8,1);
-	    _max7219_write_strob(*max7219_handler);
+	    _max7219_push_data(*max7219_handler, myTrans);
 
 	    // Decode Mode - No 1 in 1
 	    // myTrans[1] hex   -> FF
@@ -41,8 +47,7 @@ void max7219_4x_dot_init(max7219_struct *max7219_handler)
 	    myTrans[4] = 0x09;  myTrans[5] = 0x00;	// pixel
 	    myTrans[6] = 0x09;  myTrans[7] = 0x00;	// pixel
 
-	    HAL_SPI_Transmit(max7219_handler->spi, myTrans, 8, 1);;
-	    _max7219_write_strob(*max7219_handler);
+	    _max7219_push_data(*max7219_handler, myTrans);
 
 	    // Intensity 3/32
 	    myTrans[0] = 0x0A;  myTrans[1] = 0x01;
@@ -50,8 +55,7 @@ void max7219_4x_dot_init(max7219_struct *max7219_handler)
 	    myTrans[4] = 0x0A;  myTrans[5] = 0x01;
 	    myTrans[6] = 0x0A;  myTrans[7] = 0x01;
 
-	    HAL_SPI_Transmit(max7219_handler->spi, myTrans, 8, 1);
-	    _max7219_write_strob(*max7219_handler);
+	    _max7219_push_data(*max7219_handler, myTrans);
 
 	    //Scan Limit - All
 	    myTrans[0] = 0x0B;  myTrans[1] = 0x07;
@@ -59,8 +63,7 @@ void max7219_4x_dot_init(max7219_struct *max7219_handler)
 	    myTrans[4] = 0x0B;  myTrans[5] = 0x07;
 	    myTrans[6] = 0x0B;  myTrans[7] = 0x07;
 
-	    HAL_SPI_Transmit(max7219_handler->spi, myTrans, 8, 1);
-	    _max7219_write_strob(*max7219_handler);
+	    _max7219_push_data(*max7219_handler, myTrans);
 
 	    // Shutdown - none
 	    // myTrans[1] -> 00 sleep
@@ -70,8 +73,7 @@ void max7219_4x_dot_init(max7219_struct *max7219_handler)
 	    myTrans[4] = 0x0C;  myTrans[5] = 0x01;
 	    myTrans[6] = 0x0C;  myTrans[7] = 0x01;
 
-	    HAL_SPI_Transmit(max7219_handler->spi, myTrans, 8, 1);
-	    _max7219_write_strob(*max7219_handler);
+	    _max7219_push_data(*max7219_handler, myTrans);
 }
 /***************************************************************************************/
 
