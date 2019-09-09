@@ -1,6 +1,6 @@
 
-#include "stm32f1xx_hal.h"
-#include "max7219_digit.h"
+#include "main.h"
+#include "max7219_4x_dot_sm.h"
 
 #define BYTE_IN_SPI_PACKAGE		2
 #define SPI_PACKAGE_TIMEOUT		2

@@ -1,5 +1,5 @@
-#ifndef MAX7219_DIGIT_H_INCLUDED
-#define MAX7219_DIGIT_H_INCLUDED
+#ifndef MAX7219_4X_DOT_SM_H_INCLUDED
+#define MAX7219_4X_DOT_SM_H_INCLUDED
 
 typedef struct
 {
@@ -49,5 +49,5 @@ typedef enum
 void max7219_init(max7219_struct *max7219_handler);
 void max7219_print_value(max7219_struct *max7219_handler, uint32_t value, position_enum position);
 
-#endif 	//	MAX7219_DIGIT_H_INCLUDED
+#endif 	//	MAX7219_4X_DOT_SM_H_INCLUDED
 
