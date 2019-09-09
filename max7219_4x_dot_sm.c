@@ -9,71 +9,67 @@
 
 void _max7219_print_one_digit(max7219_struct max7219_handler, uint8_t position, uint32_t value);
 void _max7219_write_strob(max7219_struct max7219_handler);
-void _max7219_push_data(max7219_struct max7219_handler, uint8_t * _data);
+void _max7219_push_data(max7219_struct max7219_handler);
 
 /***************************************************************************************/
 
-void _max7219_push_data(max7219_struct max7219_handler, uint8_t * _data)
+void _max7219_push_data(max7219_struct max7219_handler)
 {
-    HAL_SPI_Transmit(max7219_handler.spi, _data, 8, 1);
+    HAL_SPI_Transmit(max7219_handler.spi, max7219_handler.data, 8, 1);
     _max7219_write_strob(max7219_handler);
 }
 
 void max7219_4x_dot_init(max7219_struct *max7219_handler)
 {
 	 // test - On
-	    myTrans[0] = 0x0F;  myTrans[1] = 0x01;
-	    myTrans[2] = 0x0F;  myTrans[3] = 0x01;
-	    myTrans[4] = 0x0F;  myTrans[5] = 0x01;
-	    myTrans[6] = 0x0F;  myTrans[7] = 0x01;
-
-	    _max7219_push_data(*max7219_handler, myTrans);
-
-	    HAL_Delay(500);
+	max7219_handler->data[0] = 0x0F;  max7219_handler->data[1] = 0x01;
+	max7219_handler->data[2] = 0x0F;  max7219_handler->data[3] = 0x01;
+	max7219_handler->data[4] = 0x0F;  max7219_handler->data[5] = 0x01;
+	max7219_handler->data[6] = 0x0F;  max7219_handler->data[7] = 0x01;
+	_max7219_push_data(*max7219_handler);
+	HAL_Delay(1500);
 
 	    // test - Off
-	    myTrans[0] = 0x0F;  myTrans[1] = 0x00;
-	    myTrans[2] = 0x0F;  myTrans[3] = 0x00;
-	    myTrans[4] = 0x0F;  myTrans[5] = 0x00;
-	    myTrans[6] = 0x0F;  myTrans[7] = 0x00;
-
-	    _max7219_push_data(*max7219_handler, myTrans);
+		max7219_handler->data[0] = 0x0F;  max7219_handler->data[1] = 0x00;
+		max7219_handler->data[2] = 0x0F;  max7219_handler->data[3] = 0x00;
+		max7219_handler->data[4] = 0x0F;  max7219_handler->data[5] = 0x00;
+		max7219_handler->data[6] = 0x0F;  max7219_handler->data[7] = 0x00;
+	    _max7219_push_data(*max7219_handler);
 
 	    // Decode Mode - No 1 in 1
 	    // myTrans[1] hex   -> FF
 	    // myTrans[1] pixel -> 00
-	    myTrans[0] = 0x09;  myTrans[1] = 0x00;	// pixel
-	    myTrans[2] = 0x09;  myTrans[3] = 0x00;	// pixel
-	    myTrans[4] = 0x09;  myTrans[5] = 0x00;	// pixel
-	    myTrans[6] = 0x09;  myTrans[7] = 0x00;	// pixel
-
-	    _max7219_push_data(*max7219_handler, myTrans);
+		max7219_handler->data[0] = 0x09;  max7219_handler->data[1] = 0x00;
+		max7219_handler->data[2] = 0x09;  max7219_handler->data[3] = 0x00;
+		max7219_handler->data[4] = 0x09;  max7219_handler->data[5] = 0x00;
+		max7219_handler->data[6] = 0x09;  max7219_handler->data[7] = 0x00;
+	    _max7219_push_data(*max7219_handler);
 
 	    // Intensity 3/32
-	    myTrans[0] = 0x0A;  myTrans[1] = 0x01;
-	    myTrans[2] = 0x0A;  myTrans[3] = 0x01;
-	    myTrans[4] = 0x0A;  myTrans[5] = 0x01;
-	    myTrans[6] = 0x0A;  myTrans[7] = 0x01;
-
-	    _max7219_push_data(*max7219_handler, myTrans);
+		max7219_handler->data[0] = 0x0A;  max7219_handler->data[1] = 0x01;
+		max7219_handler->data[2] = 0x0A;  max7219_handler->data[3] = 0x01;
+		max7219_handler->data[4] = 0x0A;  max7219_handler->data[5] = 0x01;
+		max7219_handler->data[6] = 0x0A;  max7219_handler->data[7] = 0x01;
+	    _max7219_push_data(*max7219_handler);
 
 	    //Scan Limit - All
-	    myTrans[0] = 0x0B;  myTrans[1] = 0x07;
-	    myTrans[2] = 0x0B;  myTrans[3] = 0x07;
-	    myTrans[4] = 0x0B;  myTrans[5] = 0x07;
-	    myTrans[6] = 0x0B;  myTrans[7] = 0x07;
-
-	    _max7219_push_data(*max7219_handler, myTrans);
+//	    myTrans[0] = 0x0B;  myTrans[1] = 0x07;
+		max7219_handler->data[0] = 0x0B;  max7219_handler->data[1] = 0x07;
+		max7219_handler->data[2] = 0x0B;  max7219_handler->data[3] = 0x07;
+		max7219_handler->data[4] = 0x0B;  max7219_handler->data[5] = 0x07;
+		max7219_handler->data[6] = 0x0B;  max7219_handler->data[7] = 0x07;
+	    _max7219_push_data(*max7219_handler);
 
 	    // Shutdown - none
 	    // myTrans[1] -> 00 sleep
 	    // myTrans[1] -> 01 work
-	    myTrans[0] = 0x0C;  myTrans[1] = 0x01;
-	    myTrans[2] = 0x0C;  myTrans[3] = 0x01;
-	    myTrans[4] = 0x0C;  myTrans[5] = 0x01;
-	    myTrans[6] = 0x0C;  myTrans[7] = 0x01;
+//	    myTrans[0] = 0x0C;  myTrans[1] = 0x01;
+		max7219_handler->data[0] = 0x0C;  max7219_handler->data[1] = 0x01;
+		max7219_handler->data[2] = 0x0C;  max7219_handler->data[3] = 0x01;
+		max7219_handler->data[4] = 0x0C;  max7219_handler->data[5] = 0x01;
+		max7219_handler->data[6] = 0x0C;  max7219_handler->data[7] = 0x01;
+	    _max7219_push_data(*max7219_handler);
 
-	    _max7219_push_data(*max7219_handler, myTrans);
 }
 /***************************************************************************************/
 

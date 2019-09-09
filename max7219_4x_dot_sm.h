@@ -6,6 +6,7 @@ typedef struct
 	SPI_HandleTypeDef	*spi;
 	GPIO_TypeDef 		*cs_port;
     uint16_t 			 cs_pin;
+    uint8_t				data[8];
 } max7219_struct;
 
 typedef struct
