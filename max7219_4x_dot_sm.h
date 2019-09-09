@@ -10,6 +10,14 @@ typedef struct
 } max7219_struct;
 /***********************************/
 
+typedef struct
+{
+	uint8_t				kub_0[8];
+	uint8_t				kub_1[8];
+	uint8_t				kub_2[8];
+	uint8_t				kub_3[8];
+}	max7219_map;
+
 typedef enum
 {
 	DisplayDigit_0_only	=	0x00,
@@ -73,6 +81,7 @@ typedef enum
 /***********************************/
 
 void max7219_init(max7219_struct *max7219_handler, max7219_Decode_Mode _decodemode,  max7219_LED_Intensity _intensity, max7219_Scan_Limit _scanlimit, max7219_Shutdown _shutdown);
+void max7219_show_all(max7219_struct *max7219_handler, 	max7219_map max7219_map_handler);
 /***********************************/
 
 #endif 	//	MAX7219_4X_DOT_SM_H_INCLUDED
