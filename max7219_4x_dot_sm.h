@@ -12,10 +12,10 @@ typedef struct
 
 typedef struct
 {
-	uint8_t				kub_0[8];
-	uint8_t				kub_1[8];
-	uint8_t				kub_2[8];
-	uint8_t				kub_3[8];
+	uint8_t				kub_0[9];
+	uint8_t				kub_1[9];
+	uint8_t				kub_2[9];
+	uint8_t				kub_3[9];
 }	max7219_map;
 
 typedef enum
