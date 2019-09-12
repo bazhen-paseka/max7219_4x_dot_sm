@@ -1,7 +1,7 @@
 #ifndef MAX7219_4X_DOT_SM_H_INCLUDED
 #define MAX7219_4X_DOT_SM_H_INCLUDED
 
-#define DIGIT_QNT_MAX 		10
+#define DIGIT_QNT_MAX 		11
 #define LINE_IN_DIGIT		8
 
 

@@ -215,6 +215,15 @@ void max7219_show_time(max7219_struct *max7219_handler, uint8_t _hour, uint8_t _
 	digit[9][1] = 0b00000001 ;
 	digit[9][0] = 0b00011111 ;
 
+	digit[10][7] = 0b01000001 ;
+	digit[10][6] = 0b01000001 ;
+	digit[10][5] = 0b01000001 ;
+	digit[10][4] = 0b01000001 ;
+	digit[10][3] = 0b01000001 ;
+	digit[10][2] = 0b00100010 ;
+	digit[10][1] = 0b00010100 ;
+	digit[10][0] = 0b00001001 ;
+
 	for (uint8_t i=0; i<8; i++)
 	{
 		max7219_handler->kub_0[i] = digit[_hour/10][i]  <<1 ;
