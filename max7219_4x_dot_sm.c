@@ -35,6 +35,13 @@ uint8_t inverse_order_in_byte (uint8_t input);
 
 void max7219_init(max7219_struct *max7219_handler, max7219_Decode_Mode _decodemode,  max7219_LED_Intensity _intensity, max7219_Scan_Limit _scanlimit, max7219_Shutdown _shutdown)
 {
+	// test - Off
+	max7219_handler->data[0] = ADDR_DISPLAY_TEST;  max7219_handler->data[1] = WorkMode;
+	max7219_handler->data[2] = ADDR_DISPLAY_TEST;  max7219_handler->data[3] = WorkMode;
+	max7219_handler->data[4] = ADDR_DISPLAY_TEST;  max7219_handler->data[5] = WorkMode;
+	max7219_handler->data[6] = ADDR_DISPLAY_TEST;  max7219_handler->data[7] = WorkMode;
+	_max7219_push_data(*max7219_handler);
+
 	// Decode Mode - No. 1 in 1
 	max7219_handler->data[0] = ADDR_DECODE_MODE;  max7219_handler->data[1] = _decodemode;
 	max7219_handler->data[2] = ADDR_DECODE_MODE;  max7219_handler->data[3] = _decodemode;
