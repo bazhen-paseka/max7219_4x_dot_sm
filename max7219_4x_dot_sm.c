@@ -35,14 +35,6 @@ uint8_t inverse_order_in_byte (uint8_t input);
 
 void max7219_init(max7219_struct *max7219_handler, max7219_Decode_Mode _decodemode,  max7219_LED_Intensity _intensity, max7219_Scan_Limit _scanlimit, max7219_Shutdown _shutdown)
 {
-	// test - On
-	max7219_handler->data[0] = ADDR_DISPLAY_TEST;  max7219_handler->data[1] = TestMode;
-	max7219_handler->data[2] = ADDR_DISPLAY_TEST;  max7219_handler->data[3] = TestMode;
-	max7219_handler->data[4] = ADDR_DISPLAY_TEST;  max7219_handler->data[5] = TestMode;
-	max7219_handler->data[6] = ADDR_DISPLAY_TEST;  max7219_handler->data[7] = TestMode;
-	_max7219_push_data(*max7219_handler);
-	HAL_Delay(200);
-
 	// test - Off
 	max7219_handler->data[0] = ADDR_DISPLAY_TEST;  max7219_handler->data[1] = WorkMode;
 	max7219_handler->data[2] = ADDR_DISPLAY_TEST;  max7219_handler->data[3] = WorkMode;
@@ -57,7 +49,7 @@ void max7219_init(max7219_struct *max7219_handler, max7219_Decode_Mode _decodemo
 	max7219_handler->data[6] = ADDR_DECODE_MODE;  max7219_handler->data[7] = _decodemode;
 	_max7219_push_data(*max7219_handler);
 
-	// Intensity 3/32
+	// Intensity x/32
 	max7219_handler->data[0] = ADDR_INTENSITY;  max7219_handler->data[1] = _intensity;
 	max7219_handler->data[2] = ADDR_INTENSITY;  max7219_handler->data[3] = _intensity;
 	max7219_handler->data[4] = ADDR_INTENSITY;  max7219_handler->data[5] = _intensity;
@@ -230,6 +222,15 @@ void max7219_show_time(max7219_struct *max7219_handler, uint8_t _hour, uint8_t _
 	digit[9][1] = 0b00000001 ;
 	digit[9][0] = 0b00011111 ;
 
+	digit[10][7] = 0b01000001 ;
+	digit[10][6] = 0b01000001 ;
+	digit[10][5] = 0b01000001 ;
+	digit[10][4] = 0b01000001 ;
+	digit[10][3] = 0b01000001 ;
+	digit[10][2] = 0b00100010 ;
+	digit[10][1] = 0b00010100 ;
+	digit[10][0] = 0b00001001 ;
+
 	for (uint8_t i=0; i<8; i++)
 	{
 		max7219_handler->kub_0[i] = digit[_hour/10][i]  <<1 ;
@@ -240,3 +241,25 @@ void max7219_show_time(max7219_struct *max7219_handler, uint8_t _hour, uint8_t _
 
 	_max7219_show_all(*max7219_handler);
 }
+
+/***************************************************************************************/
+
+void max7219_test_LED(max7219_struct *max7219_handler, uint32_t _time_ms_u32)
+{
+	// test - On
+	max7219_handler->data[0] = ADDR_DISPLAY_TEST;  max7219_handler->data[1] = TestMode;
+	max7219_handler->data[2] = ADDR_DISPLAY_TEST;  max7219_handler->data[3] = TestMode;
+	max7219_handler->data[4] = ADDR_DISPLAY_TEST;  max7219_handler->data[5] = TestMode;
+	max7219_handler->data[6] = ADDR_DISPLAY_TEST;  max7219_handler->data[7] = TestMode;
+	_max7219_push_data(*max7219_handler);
+
+	HAL_Delay(_time_ms_u32);
+
+	// test - Off
+	max7219_handler->data[0] = ADDR_DISPLAY_TEST;  max7219_handler->data[1] = WorkMode;
+	max7219_handler->data[2] = ADDR_DISPLAY_TEST;  max7219_handler->data[3] = WorkMode;
+	max7219_handler->data[4] = ADDR_DISPLAY_TEST;  max7219_handler->data[5] = WorkMode;
+	max7219_handler->data[6] = ADDR_DISPLAY_TEST;  max7219_handler->data[7] = WorkMode;
+	_max7219_push_data(*max7219_handler);
+}
+/***************************************************************************************/

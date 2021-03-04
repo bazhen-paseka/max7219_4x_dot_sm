@@ -1,7 +1,7 @@
 #ifndef MAX7219_4X_DOT_SM_H_INCLUDED
 #define MAX7219_4X_DOT_SM_H_INCLUDED
 
-#define DIGIT_QNT_MAX 		10
+#define DIGIT_QNT_MAX 		11
 #define LINE_IN_DIGIT		8
 
 
@@ -86,7 +86,7 @@ typedef enum
 
 void max7219_init(max7219_struct *max7219_handler, max7219_Decode_Mode _decodemode,  max7219_LED_Intensity _intensity, max7219_Scan_Limit _scanlimit, max7219_Shutdown _shutdown);
 void max7219_show_time(max7219_struct *max7219_handler, uint8_t _hour, uint8_t _minutes);
-
+void max7219_test_LED(max7219_struct *max7219_handler, uint32_t _time_ms_u32);
 /***********************************/
 
 #endif 	//	MAX7219_4X_DOT_SM_H_INCLUDED
