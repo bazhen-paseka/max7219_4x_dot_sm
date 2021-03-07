@@ -31,10 +31,25 @@
 	#define	WRITE_STROB_DELAY		10
 /*
 **************************************************************************
+*						        MACROS
+**************************************************************************
+*/
+	#define BIT_SET(   byte , pos )		((byte) |=  (1UL << (pos)))
+	#define BIT_CLR(   byte , pos )		((byte) &= ~(1UL << (pos)))
+	#define BIT_TOGGLE(byte , pos )		((byte) ^=  (1UL << (pos)))
+	#define BIT_CHECK( byte , pos )		((byte) &   (1UL << (pos)))
+
+/*
+**************************************************************************
 *						    LOCAL DATA TYPES
 **************************************************************************
 */
 
+/*
+**************************************************************************
+*								    ENUM
+**************************************************************************
+*/
 typedef enum {
 	ADDR_NO_OP 			= 0x00 ,
 	ADDR_DIGIT_0		= 0x01 ,
@@ -52,8 +67,6 @@ typedef enum {
 	ADDR_EMPTY			= 0x0D ,
 	ADDR_DISPLAY_TEST	= 0x0F
 }		Register_Address_Map;
-
-/***************************************************************************************/
 
 /*
 **************************************************************************
@@ -125,7 +138,7 @@ void max7219_init(	max7219_struct *max7219_handler	,
 void max7219_show_time(	max7219_struct *max7219_handler ,
 						uint8_t _hour					,
 						uint8_t _minut					) {
-	uint8_t digit[DIGIT_QNT_MAX][LINE_IN_DIGIT] ;
+	uint8_t digit[DIGIT_QNT_MAX][LINE_IN_PANEL] ;
 
 	digit[0][7] = 0b00011111 ;
 	digit[0][6] = 0b00010001 ;
@@ -226,12 +239,23 @@ void max7219_show_time(	max7219_struct *max7219_handler ,
 	digit[10][1] = 0b00010100 ;
 	digit[10][0] = 0b00001001 ;
 
-	for (uint8_t i=0; i<8; i++)	{
-		max7219_handler->kub_0[i] = digit[_hour/10][i]  <<1 ;
-		max7219_handler->kub_1[i] = digit[_hour%10][i]  <<2 ;
-		max7219_handler->kub_2[i] = digit[_minut/10][i] <<1 ;
-		max7219_handler->kub_3[i] = digit[_minut%10][i] <<2 ;
+	for (uint8_t line=0; line<8; line++)	{
+		max7219_handler->panel[0][line] = digit[_hour/10] [line] <<1 ;	//	We shift the digits from the right edge
+		max7219_handler->panel[1][line] = digit[_hour%10] [line] <<2 ;	//		and bringing digits together.
+		max7219_handler->panel[2][line] = digit[_minut/10][line] <<1 ;
+		max7219_handler->panel[3][line] = digit[_minut%10][line] <<2 ;
 	}
+
+	uint8_t random_panel_u8 = (uint8_t) rand() % 4 ;
+	uint8_t random_lines_u8 = (uint8_t) rand() % 8 ;
+	uint8_t random_point_u8 = (uint8_t) rand() % 8 ;
+
+//	if ( BIT_CHECK ( max7219_handler->panel[random_panel_u8][random_lines_u8] , random_point_u8 ) == 1 ) {
+//			BIT_CLR( max7219_handler->panel[random_panel_u8][random_lines_u8] , random_point_u8 ) ;
+//	} else {
+//			BIT_SET( max7219_handler->panel[random_panel_u8][random_lines_u8] , random_point_u8 ) ;
+//	}
+	BIT_TOGGLE( max7219_handler->panel[random_panel_u8][random_lines_u8] , random_point_u8) ;
 
 	_max7219_show_all(*max7219_handler);
 }
@@ -241,10 +265,10 @@ void _max7219_show_all( max7219_struct max7219_handler ) {
 //	uint8_t myTrans[8]; // 1 - for  razryad or Adres; 2- znachenie
 	for (uint8_t i=0; i<8; i++) {
 		uint8_t addr_u8 = i + ADDR_DIGIT_0;
-		max7219_handler.data[6] = addr_u8 ;  max7219_handler.data[7] = inverse_order_in_byte(max7219_handler.kub_0[i] ) ;
-		max7219_handler.data[4] = addr_u8 ;  max7219_handler.data[5] = inverse_order_in_byte(max7219_handler.kub_1[i] ) ;
-		max7219_handler.data[2] = addr_u8 ;  max7219_handler.data[3] = inverse_order_in_byte(max7219_handler.kub_2[i] ) ;
-		max7219_handler.data[0] = addr_u8 ;  max7219_handler.data[1] = inverse_order_in_byte(max7219_handler.kub_3[i] ) ;
+		max7219_handler.data[6] = addr_u8 ;  max7219_handler.data[7] = inverse_order_in_byte(max7219_handler.panel[0][i] ) ;
+		max7219_handler.data[4] = addr_u8 ;  max7219_handler.data[5] = inverse_order_in_byte(max7219_handler.panel[1][i] ) ;
+		max7219_handler.data[2] = addr_u8 ;  max7219_handler.data[3] = inverse_order_in_byte(max7219_handler.panel[2][i] ) ;
+		max7219_handler.data[0] = addr_u8 ;  max7219_handler.data[1] = inverse_order_in_byte(max7219_handler.panel[3][i] ) ;
 		_max7219_push_data( max7219_handler ) ;
 	}
 }
@@ -314,5 +338,8 @@ void _max7219_print_one_digit(	max7219_struct max7219_handler	,
 	HAL_SPI_Transmit( max7219_handler.spi , spi_buffer , BYTE_IN_SPI_PACKAGE , SPI_PACKAGE_TIMEOUT ) ;
 	_max7219_write_strob( max7219_handler ) ;
 }
-/***************************************************************************************/
-/***************************************************************************************/
+/*
+**************************************************************************
+*                                   END
+**************************************************************************
+*/
