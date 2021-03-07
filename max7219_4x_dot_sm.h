@@ -116,10 +116,23 @@ typedef enum
 **************************************************************************
 */
 
-void max7219_init		( max7219_struct *max7219_handler , max7219_Decode_Mode _decodemode ,
-							max7219_LED_Intensity _intensity , max7219_Scan_Limit _scanlimit , max7219_Shutdown _shutdown ) ;
-void max7219_show_time	( max7219_struct *max7219_handler , uint8_t _hour , uint8_t _minutes ) ;
-void max7219_test_LED	( max7219_struct *max7219_handler , uint32_t _time_ms_u32 ) ;
+void max7219_init	( max7219_struct 		*max7219_handler	,
+					max7219_Decode_Mode 	_decodemode			,
+					max7219_LED_Intensity	_intensity			,
+					max7219_Scan_Limit 		_scanlimit	 		,
+					max7219_Shutdown 		_shutdown 			) ;
+
+void Max7219_struct_init (	max7219_struct 		*handler		,
+							SPI_HandleTypeDef	*_spi			,
+							GPIO_TypeDef 		*_cs_port		,
+							uint16_t 			 _cs_pin		) ;
+
+void max7219_show_time	( max7219_struct	*max7219_handler 	,
+						uint8_t 			_hour 				,
+						uint8_t 			_minutes 			) ;
+
+void max7219_test_LED	( max7219_struct 	*max7219_handler 	,
+						uint32_t 			_time_ms_u32 		) ;
 
 /*
 **************************************************************************
