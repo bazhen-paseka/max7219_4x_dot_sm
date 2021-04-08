@@ -23,14 +23,21 @@
 */
 	#include "main.h"
 	#include <stdlib.h>
+	#include "max7219_local_config.h"
 /*
 **************************************************************************
 *								    DEFINES
 **************************************************************************
 */
-	#define DIGIT_QNT_MAX 		11
-	#define LINE_IN_PANEL		8
-	#define PANEL_QNT			4
+	#define	WRITE_STROB_DELAY		10
+	#define SPI_PACKAGE_TIMEOUT		3
+	//	#define SPI_PACKAGE_TIMEOUT		1	only for random picture
+
+	#define DIGIT_QNT_MAX 			11
+	#define PANEL_QNT				4
+	#define LINE_IN_PANEL			8
+	#define DOT_IN_LINE				8
+	#define BYTE_IN_SPI_PACKAGE		8
 /*
 **************************************************************************
 *								    STRUCT
