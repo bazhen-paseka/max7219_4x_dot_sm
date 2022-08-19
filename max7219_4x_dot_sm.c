@@ -259,15 +259,21 @@ void max7219_show_time(	max7219_struct	*_max7219_handler	,
 		_max7219_handler->panel[3][line] = digit[_minut%10][line] << 2 ;
 	}
 
-	#ifdef RANDOM_DOT
-	uint8_t random_qnt_u8 = 1 + (uint8_t) rand() % RANDOM_ERROR_QNT ;
-	for (uint8_t r=0; r<random_qnt_u8; r++) {
-		uint8_t random_panel_u8 = (uint8_t) rand() % PANEL_QNT ;
-		uint8_t random_lines_u8 = (uint8_t) rand() % LINE_IN_PANEL ;
-		uint8_t random_point_u8 = (uint8_t) rand() % DOT_IN_LINE ;
-		BIT_TOGGLE( _max7219_handler->panel[random_panel_u8][random_lines_u8] , random_point_u8) ;
-	}
-	#endif
+#ifdef RANDOM_DOT
+	uint8_t bit_check_u8    ;
+	uint8_t random_panel_u8 ;
+	uint8_t random_lines_u8 ;
+	uint8_t random_point_u8 ;
+
+	do {
+		 random_panel_u8 = (uint8_t) rand() % PANEL_QNT ;
+		 random_lines_u8 = (uint8_t) rand() % LINE_IN_PANEL ;
+		 random_point_u8 = (uint8_t) rand() % DOT_IN_LINE ;
+		 bit_check_u8 = BIT_CHECK( _max7219_handler->panel[random_panel_u8][random_lines_u8] , random_point_u8) ;
+	} while (bit_check_u8);
+	BIT_TOGGLE( _max7219_handler->panel[random_panel_u8][random_lines_u8] , random_point_u8) ;
+
+#endif
 	_max7219_show_all( *_max7219_handler ) ;
 }
 /***************************************************************************************/
