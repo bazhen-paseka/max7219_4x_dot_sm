@@ -23,7 +23,7 @@
 */
 	#include "main.h"
 	#include <stdlib.h>
-	#include "max7219_local_config.h"
+	#include "Local_config.h"
 /*
 **************************************************************************
 *								    DEFINES
